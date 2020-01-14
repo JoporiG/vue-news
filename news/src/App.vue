@@ -50,6 +50,7 @@
         <v-row justify="center" align="center">
           <v-col class="shrink">
             <router-view v-for="el in articles" :key="el.title"
+            :title="el.title"
             :text="el.description"
             :img="el.urlToImage"
             :url="el.url"/>

@@ -16,6 +16,7 @@
         </v-img>
         <v-card-title>
           <div>
+            <h3>{{title}}</h3><br>
             <span>{{text}}</span>
           </div>
         </v-card-title>
@@ -31,7 +32,7 @@
 <script lang="ts">
 import Vue from 'vue'
 export default Vue.extend({
-    props:['text', 'img', 'url'],
+    props:['title', 'text', 'img', 'url'],
     methods:{
         redirect(){
             window.location.href = this.url;
