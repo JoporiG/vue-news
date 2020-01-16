@@ -19,11 +19,20 @@
       color="blue-grey"
       dark
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer" /> 
       <v-toolbar-title>
-        <router-link to="/en">en | </router-link>
-        <router-link to="/ru">ru</router-link>
-
+        <router-link to="/en">
+          <span @click="ChangeLang(`us`)">us | </span>
+        </router-link>
+        <router-link to="/ru">
+          <span @click="ChangeLang(`ru`)">ru | </span>
+        </router-link>
+        <router-link to="/pl">
+          <span @click="ChangeLang(`pl`)">pl | </span>
+        </router-link>
+        <router-link to="/cz">
+          <span @click="ChangeLang(`cz`)">cz</span>
+        </router-link>
       </v-toolbar-title>
       <v-spacer />
       <v-app-bar-nav-icon @click.stop="drawerRight = !drawerRight" />
@@ -49,7 +58,7 @@
       <v-container class="fill-height" fluid>
         <v-row justify="center" align="center">
           <v-col class="shrink">
-            <router-view v-for="el in articles" :key="el.title"
+            <router-view v-for="el in Article()" :key="el.title"
             :title="el.title"
             :text="el.description"
             :img="el.urlToImage"
@@ -83,23 +92,45 @@ import axios from 'axios'
       drawerRight: null,
       right: false,
       left: false,
-      articles: [],
+      articlesUS: [],
+      articlesRU: [],
+      articlesPL: [],
+      articlesCZ: [],
+      Country: `us`,
     }), 
     methods:{
-      Load(){
-        axios.get('https://newsapi.org/v2/top-headlines?country=ru&apiKey=d7f41a32c26b4bbfb596d58b1a54c766').then((response) =>{
-          this.articles = response.data.articles;
-        })
+      ChangeLang(lang){
+        this.Country = lang;
       },
+      Article(){
+        switch(this.Country){
+          case `us`:
+            return this.articlesUS;
+          case `ru`:
+            return this.articlesRU;
+          case `pl`:
+            return this.articlesPL;
+          case `cz`:
+            return this.articlesCZ;
+        }
+      }
     },
     mounted(){
-      this.Load();
+      axios.get(`https://newsapi.org/v2/top-headlines?country=us&apiKey=d7f41a32c26b4bbfb596d58b1a54c766`).then((response) =>{
+          this.articlesUS = response.data.articles;
+        })
+        axios.get(`https://newsapi.org/v2/top-headlines?country=ru&apiKey=d7f41a32c26b4bbfb596d58b1a54c766`).then((response) =>{
+          this.articlesRU = response.data.articles;
+        })
+        axios.get(`https://newsapi.org/v2/top-headlines?country=pl&apiKey=d7f41a32c26b4bbfb596d58b1a54c766`).then((response) =>{
+          this.articlesPL = response.data.articles;
+        })
+        axios.get(`https://newsapi.org/v2/top-headlines?country=cz&apiKey=d7f41a32c26b4bbfb596d58b1a54c766`).then((response) =>{
+          this.articlesCZ = response.data.articles;
+        })
     }
   }
 </script>
 
 <style scoped>
-  .shirina{
-    width: 10000000px,
-  }
 </style>
